@@ -77,7 +77,7 @@ Relational Database:
 
         sqlite3 - to interact with SQLite - CLI
 
-        Data Types:
+        Data Type Affinities:
             BLOB - Binary data
             INTEGER - Whole Number 32bits
                 smallint
@@ -228,12 +228,23 @@ Lambda: An anonymous function for a singular run
 
 Joined Table: A table with a relationship to another table
 
+MySQL: Open Source platform utilizing SQL.
+
+PhPMyAdmin: Graphical UI to interact with the databse directly
+
+Predicate: A function that can be expressed as boolean valued
+
 SQL: Structured Query Language - Implements CRUD
-    CREATE
-    INSERT
-    SELECT
-    UPDATE
-    DELETE
+    CREATE, INSERT - INSERT INTO <table>(<columns>,..) VALUES(<value>, ...)
+    SELECT - SELECT <column> FROM <table> opt:WHERE <predicate> opt:ORDER BY <column>
+    JOIN - SELECT <columns> FROM <table1> JOIN <table2> ON <predicate>
+        eg; SELECT users.fullname, moms.mother FROM users JOIN moms ON users.username = moms.username
+        appending columns names to be able to diambiguate which columns. - Be explicit
+        Predicate is an overlap in table information
+        join returns temporary table containing requested information
+        select then returns the request from joined table
+    UPDATE - <table> SET <column> = <value> WHERE <predicate>
+    DELETE - DELETE FROM <table> WHERE <predicate>
 
 CRUD:
     Create
