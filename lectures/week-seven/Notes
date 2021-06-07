@@ -1,0 +1,242 @@
+## DATABASE'S ##
+
+
+Spreadsheets:
+    -Good method for storing and sorting datasets
+    -Columns can be looked at as properties
+    -Data usually added top -> bottom
+    -Columns usually reserved for data types
+        The above represent a SCHEMA
+
+Flat-File Database:
+    Eg; CSV
+    -Flat-file means a simple format of storing persistant data in a file.
+    -Typically with csv that contains commas, you would double-quote the string containing the comma
+    -Can only store static values
+    -Primitve
+    -Not a good structure for larger datasets
+    -Inefficient for queries
+
+Relational Database:
+    Eg; SQLite
+    Persistant data storage on a running program/services
+    -Extremely efficient
+    -Power almost all of the web !
+
+    -Each SQL program has a slightly different 'dialect'
+
+    -AVOID STORING COMMA SEPARATED LISTS
+
+    Tables:
+        -Search/update/insert/delete data
+        -col/row data storage
+
+    Inedex:
+        Using an index is a way to optimize SQL to be logarithmic. Indexing a tree creates a 'B-Tree'
+        CREATE INDEX <index_name> ON <table> (<column>)
+            Using the above we can create an index for SQLite to look into on a query to the aforementioned column
+
+        -indicies are only needed to be created once to allow fro tree based searching as opposed to linear search
+
+    Clauses:
+        WHERE <condition>
+        LIKE <item>
+        ORDER BY <condition>
+        LIMIT <max>
+        GROUP BY <condition>
+        OR
+
+    Commands:
+        CREATE
+        INSERT
+        SELECT
+        UPDATE
+        DELETE
+        JOIN - Join tables together
+
+    Functions:
+        AVG()
+        COUNT()
+        DISTINCT() - Filters to provide only distinct values (no duplicates)
+        LOWER()
+        UPPER()
+        MAX()
+        MIN()
+        DESC() - descending order
+        ASC() - ascending order
+        TRIM()
+
+    Wildcard Characters:
+        % - 0 or more
+        * - All
+
+    SQLite:
+        -Very small and portable
+        -Simple ipmlementation of SQL
+        -Stores tables/data in a single binary file
+
+        sqlite3 - to interact with SQLite - CLI
+
+        Data Types:
+            BLOB - Binary data
+            INTEGER - Whole Number 32bits
+                smallint
+                integer
+                bigint - 64bits
+            NUMERIC - Number-like
+                boolean
+                date
+                datetime
+                numeric(scale,precision)
+                time
+                timestamp
+            REAL - Decimal Number
+                real
+                double precision
+            TEXT - String
+                char(n) - every value has same n chars
+                varchar(n) - specifies max n chars
+                text - large dataset
+
+            NOT NULL - Value in this column cannot be NULL
+            UNIQUE  - Values in this column must be unique
+            PRIMARY KEY - Uniquely identifies a row
+            FOREGIN KEY - Id within a nested table pointed to by the primary key
+
+        Commands:
+            .mode
+            .import - ipmorts data from provided file
+            .schema - displays current data schema
+            .save <filename.db> - extension arbitrary (it's just binary) but standardized with .db
+
+        Load options:
+            -Import existing .cvs file
+                .mode csv
+                .import <'filename'> <tablename>
+            -Write code to insert data
+
+    Many-to-many relationship:
+        One entry has a relationship with many other entries
+        This removes the need of having multiple entries for the same piece of data.
+
+    SQL Injection Attack:
+        When an attacker uses SQL queries inside text submission fields on, say, a website. Which then get queried towards said site's database.
+        -Quite common
+
+        Example - SAFE - USES PLACEHOLDERS:
+            rows = db.execute("SELECT * FROM users WHERE username = ? AND password = ?", username, password)
+
+            if len(rows) == 1:
+                # Log user in
+
+        Example - UNSAFE !!!:
+            rows = db.execute(f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'")
+
+            if the user enters a username in the above with '-- (SQL comment) at the end, this could cause it to comment out the 'AND password...' portion.
+            Bypassing password requirement
+
+    Race Conditions:
+        When many queries are requested and 'race' to be executed first.
+        Solved by using;
+        TRANSACTIONS - lock row in table
+        COMMITS - Garuntees all between Transaction start and commit either fail or succeed
+        ROLLBACKS - Reverts back to a previous state
+
+        Example;
+            db.execute("BEGIN TRANSACTION")
+            ...
+            rows = db.execute("SELECT * FROM users WHERE username = ? AND password = ?", username, password)
+            ...
+            db.execute("COMMIT")
+
+
+    Examples;
+        CREATE TABLE <table> (<column>, ...);
+
+        INSERT INTO <table> (<column>, ...) VALUES(<column_1 value>, ...);
+
+        SELECT <column> FROM <table>;
+            Eg; SELECT title FROM shows
+                Provides a list of 'titles' from the table 'shows'
+
+        SELECT title, viewers FROM shows;
+            Provides a list of both 'titles' and 'viewers' from table 'shows'
+
+        SELECT * FROM shows;
+            Provides ALL data from table 'shows'
+
+        SELECT title FROM shows WHERE title = "The Office";
+            -Gets a list of all entries in table with exact match
+
+        SELECT title FROM shows WHERE title LIKE "%Office%";
+            -Gets a list of all entries in table similar to provided
+
+        SELECT DISTINCT(UPPER(title)) FROM shows ORDER BY UPPER(title);
+            -Selects all distinct titles as uppercase
+            -Orders them by the uppercase variant of said title
+
+        SELECT UPPER(title), COUNT(title) FROM shows GROUP BY UPPER(title);
+            -Gets all the titles, as well as the count from each title similar to said title
+
+        SELECT UPPER(title), COUNT(title) FROM shows GROUP BY UPPER(title) ORDER BY COUNT(title) DESC LIMIT 10;
+            -Gets all the titles and counts for said title + similar names,
+            ordered alphabetically by title name - descending,
+            limited to 10 results
+
+        SELECT UPPER(TRIM(title)), COUNT(title) FROM shows GROUP BY UPPER(TRIM(title)) ORDER BY COUNT(title) DESC LIMIT 10;
+            -Same as above, trims whitespace
+
+        INSERT INTO shows(Timestamp, title, genres) VALUES("now", "The Muppet Show", "Comedy, Musical");
+            -Input data into DB like this instead of csv foromat to store the csv list (genres) as a single string
+            -This pruposes the issue of needing to filter the commas off the string. Use second table instead
+
+        SELECT title FROM shows Where id IN (SELECT show_id FROM genres WHERE genres = "Musical");
+            -Nested query example
+            -Perenthesis are executed first
+            -Gets name from one table and ganre from second
+
+        SELECT * FROM shows WHERE title LIKE "%Muppet%";
+
+        SELECT id FROM people WHERE name = "Steve Carell";
+        136797
+        ...
+        SELECT show_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = "Steve Carell");
+        115148
+        118420
+        ...
+        SELECT title FROM shows WHERE show_id IN (SELECT show_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = "Steve Carell"));
+        The Office
+        ...
+
+        SELECT title FROM people
+        JOIN stars ON people.id = stars.person_id - Joins stars table to people table via primary and foreign keys
+        JOIN shows ON stars.show_id = shows.id - Joins stars table to shows table
+        WHERE name = "Steve Carell"; - Filters based on name
+
+
+## DEFINITIONS ##
+
+B-Tree: A tree that spreawds out the leaf nodes to be as short a distance from the root as possible
+
+Normalize Data: Eliminate matching entries using unique IDs
+
+Canonicalize: To format data in a standard way
+
+Lambda: An anonymous function for a singular run
+    Mathmatically a lamba represents a function
+    lambda=<arg>: <return>
+
+Joined Table: A table with a relationship to another table
+
+SQL: Structured Query Language - Implements CRUD
+    CREATE
+    INSERT
+    SELECT
+    UPDATE
+    DELETE
+
+CRUD:
+    Create
+    Read
+    Update
+    Delete
