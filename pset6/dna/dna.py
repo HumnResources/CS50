@@ -1,14 +1,20 @@
 from sys import argv
 import csv
 
+
 def main():
     if len(argv) != 3:
         print("Please double check your command arguments:\npython dna.py <STR-DB-Path> <DNA-file-path>")
         return
 
-    # List of dicts for each person
+    # Database contains a list with index 0 being the name.
+    # This allows for len() to iterate over any # STRs provided
     database = []
+    # Store individual STRs
     str_list = []
+    # Store STR counts
+    str_counts = []
+
     # Read in database file containing people's DNA sequence's
     with open(argv[1], "r") as csvfile:
         reader = csv.reader(csvfile)
@@ -28,8 +34,6 @@ def main():
     file = open(argv[2], "r")
     dna = file.readline().strip()
     file.close()
-
-    str_counts = []
 
     # For each of our STRs, loop through and find the longest substring in sequence
     for STR in str_list:
@@ -64,11 +68,17 @@ def main():
 
     # Checks if we have an exact match in our database
     for row in database:
-        if row[1] == str_counts[0] and row[2] == str_counts[1] and row[3] == str_counts[2]:
-            print(row[0])
-            return
+        for i in range(len(str_counts)):
+            # No Match
+            if row[i + 1] != str_counts[i]:
+                break
+            # If we got to the end of the DNA sequence - Match Found
+            elif i == len(str_counts) - 1:
+                print(row[0])
+                return
 
     # If we get this far we did not find a match
     print("No match")
+
 
 main()
