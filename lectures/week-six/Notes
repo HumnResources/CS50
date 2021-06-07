@@ -1,0 +1,114 @@
+## PYTHON ##
+
+-Python is heavily abstracted.
+-Uses whitespace instead of brackets for code blocks
+-Dynamically typed
+-Boolean values must be capitalized eg; True/False
+-Uses colons to signal indented code block
+-[] is a list of objects
+-Provides many ways to do the same operation/task
+-Uses an interpreter to reun programs.
+ It decides how to perform the operation as it reads the code
+-No DO WHILE
+-Does not have integer overflow
+-floating point impercision still exists
+-{x:y} Dictionaries are constant time O(1) because its a hash table
+
+
+Primitive Types:
+    bool
+    float
+    int
+    str
+
+Data Types:
+    list - Similar to arrays but dynamically sized
+    tuple - Useful for representing lines/coords
+    dict - Key-value pair store
+    set - A list of items with no duplicates
+
+Pythonic:
+    Performing an operation/algorithm in the 'correct' way relaitve to the current context
+
+CS50 Library:
+    get_float
+    get_int
+    get_string
+
+Import:
+    import cs50
+    from cs50 import get_string
+    from cs50 import get_string, get_int, ...
+
+File I/O
+    Open file
+    file = open(<file uri>, <str mode>)
+
+    read in csv format
+    reader = csv.reader(file)
+
+    skips a line
+    next(reader)
+
+    Go through each pair in csv file
+    for row in reader:
+        key = row[1]
+        dict[key] += 1 (value)
+
+    -- alternative -- closest on end
+
+    with open(<str uri>, <str mode>) as <var_name>:
+        ...
+
+
+Command Line Args:
+    import from sys module
+
+Examples:
+
+    if x < y:
+        print("x is less than y")
+    elif x > y:
+        print("X is greater than y")
+    else:
+        ...
+
+    First loop works, but messy and can include any type.
+    Conventions are to enumerate.
+
+    for i in [0, 1, 2]:
+        ...
+
+    #Pythonic way
+    for i in range(3):
+        ...
+
+    # [] as a paramater indicates one that is optional
+    range(stop)
+    range(start, stop[, step])
+    for i in range(0, 101, 2)
+        ...
+
+    if x in [1, 2, 3]:
+        return True
+
+    if x.lower() in ["yes", "y"]:
+        return True
+
+    s = "hello"
+    for c in s:
+        c = s.upper()
+        print(c, end="")
+
+
+
+## DEFINITIONS ##
+
+Loosely typed language: Types exist, but they are inferred implicitly by the compiler.
+
+Strongly typed language: Must tell the compiler what type a variable etc is.
+
+Namespacing: The idea of having two or more functions with the same name, usable, by being inside different groups or 'namespace'
+
+Named Arguments: When a function takes multiple params, each can have their own name.
+    Eg; print() supports arg 'end'. print("?", end="") - removes the newline from print by changing end from '\n' -> ''

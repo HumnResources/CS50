@@ -1,0 +1,340 @@
+## MEMORY ##
+
+Hexadecimal :
+    Uses a base 16 system of 0-9-A-Z where A is 10 and Z is 15. (Zero counts as a digit used)
+    Eg; 00, 01, ... 09, 0A, 0B, ... 0F, 10, 11, 12
+        * value 0x12 equals 18
+
+    Color is a common example of use for hexadecimal.
+        Eg; 0x484921
+            R: 48
+            G: 49
+            B: 21
+
+        0x000000 -> Black (Min all color values)
+        0xFFFFFF -> White (max all color values)
+
+Each byte in memory gets assigned a single hexadecimal assignment.
+Hence the length of a memory address being different on error codes and the like.
+They ustilize different amounts of memory.
+
+& -> Andpersand : Access the address of a variable.
+
+* -> Dereference Operator : Tells compiler to 'look inside' the perticular address.
+
+When counting in binary, compared to hex;
+    0x0, 0x1, ... 0xE, 0xF -> 0000, 0001, 1110, 1111
+    (1, 2, ... 14, 15)
+
+This notion can be applicable to the use of nitwise operations and the like. Due to being able to 'flip' bits using hex.
+
+The number 0x397 equals:
+      3*16^2(256*3)
+    + 9*16^1(16*9)
+    + 7*1
+
+Converting from binary to hex:
+    01000110101000101011100100111101
+
+    from right to left group into groups of 4
+    0100 0110 1010 0010 1011 1001 0011 1101
+
+    1101 -> 13 -> D
+    0011 -> 3 -> 3
+    1001 -> 9 -> 9
+    1011 -> 11 -> B
+    0010 -> 2 -> 2
+    1010 -> 10 -> A
+    0110 -> 6 -> 6
+    0100 -> 4 -< 4
+
+    0x46A2B93D
+
+Very useful for memory addresses !!
+
+
+
+## POINTERS ##
+
+    A different type of variable that sotres the address of a variable.
+    It references the type of value the address itself contains.
+
+-Addresses change constantly
+-Pointers have a tendency to utilize 8 bytes.
+-Pointers generally use an arrow to pictorally represent them.
+
+Address : Location in memory.
+
+The string method in use up until now has essentially been a pointer.
+    string type returns an address of the first character, up until the terminating 0.
+
+Strings in c are just a char*
+
+When comparing pointers to eachother, you must dereference and compare the value.
+Otherwise you end up comparing the actual address itself.
+
+Common memory leak when using malloc() and not calling free() !!
+
+
+!! DANGEROUS EXAMPLE !!
+
+int main(void)
+{
+    // Not initialized!
+    int *x;
+    int *y;
+
+    // Request memory amount the size of an integer. (4 bytes)
+    x = malloc(sizeof(int));
+
+    // Dereference and goto the address, put n in that position.
+    *x = 42;
+
+    // y is never allocated any memory! No address to store n - Segmentation Fault when dereferencing an uninitialized variable
+    *y = 13;
+
+    y = x;
+
+    // Never call free() !!!
+    *y = 13;
+}
+
+
+Memory Layout
+    Machine Code
+    Globals
+    Heap  <- malloc() uses heap memory
+    \/
+
+
+    ...
+    swap <- removed after use, stack grows "up" - see swap.c
+    main
+    /\
+    Stack  <- function calls use stask memory
+
+
+Heap Overflow : Reached the limit of the available heap.
+
+Stack Overflow : Reached the limit of the available stack.
+    Both cann occur if the HEAP and STACK collide.
+
+Dynamic Memory Allocation :
+    -Uses pointers to get access to a dynamic block of memory allocated at runtime.
+    -Comes from a pool of memory known as the HEAP.
+    -Generally, if you provide a name to a variable, it's on the STACK. Otherwise, it lives on the HEAP.
+        Not always true
+
+    Use malloc(n of bytes) to allocate memory from the HEAP.
+        Returns pointer to memory address.
+        If no memory available, returns NULL pointer.
+            Dereferencing a NULL pointer causes SEGFAULT
+
+    // Statically obtain memory from the STACK
+    int x;
+
+    // Dynamically obtain memory from the HEAP
+    int *px = malloc(sizeof(int));
+
+    // Get int from user
+    int x = getInt();
+
+    // Array of floats on the STACK
+    float stack_array[x];
+
+    // Array of floats on the HEAP
+    float * heap_Array = malloc(x * sizeof(float));
+
+    TROUBLE :
+        -Unlike STACK memory, HEAP is not returned to the system after the function call/executed.
+        -Failing to return memory back creates a MEMORY LEAK !
+        -USE free()!!
+
+    THREE GOLDEN RULES :
+        EVERY BLOCK OF malloc() MUST BE free()d
+        ONLY THINGS THAT YOU malloc() SHOULD BE free()d
+        DO NOT free() TWICE
+
+    The pointer variable itself lives on the STACK, but is allocated memory to use from the HEAP on malloc() call
+
+
+CALL STACK :
+    -When you call a function, the system sets aside space in memory for that function.
+        Typically referred to as a stack frame or function frame.
+
+    -More than one stack frame may exist at any given time in memory.
+        main() calling open() calling handle_query(), all three functions have open frames.
+
+    -Most recent called function is always at the TOP.
+        Active frame.
+
+    -Calling a new function 'pushes' the the new frame ontop of the stack.
+
+    -When function finishes, its 'popped' off the stack, and the stack below moves up becoming the active stack.
+
+    -Recusrion works by constantly pushing a new frame on the stack until base case then they pop off.
+
+
+FILE POINTERS :
+    use sizeof() because its asking for number of bytes to read.
+
+    fopen();
+        returns file pointer to a file.
+        always check for NULL
+        file *  ptr = fopen("file1.txt", "r");S
+            'r' is the operation/mode of fopen.
+                'r' - read-only
+                'w' - write-enabled
+                'a' - append
+
+    fclose(<file pointer>);
+        Closes the specified file.
+
+    fgetc(<file pointer>);
+        Reads and returns the next character in the file pointed to.
+        file pointer used must be 'r' operation mode
+        char ch = fgetc(ptr);
+            looping this would read every character from a file.
+
+    fputc(<char>, <file pointer>);
+        file pointer must be open in 'w' operation mode
+
+    fread(<buffer>, <size>, <qty>, <file pointer>);
+        reads <qty> units of size <size> from the file pointed to by <file pointer>
+        and stores them into a buffer of memory (usually array), pointed to by <buffer>
+        Operation mode must be 'r'
+
+        int arr[10];
+        fread(arr, sizeof(int), 10, ptr);
+            // arr is a pointer to an array so syntactically correct
+
+        double * arr2 = malloc(sizeof(double) * 80);
+        fread(arr2, sizeof(souble), 80, ptr);
+
+        char c;
+        fread(&c, sizeof(char), 1, ptr);
+            Here we use address of the variable, as that is a pointer.
+
+    fwrite(<buffer>, <size>, <qty>, <file pointer>);
+        writes <qty> units of size <size> to the file pointed to by <file pointer>,
+        reading from a buffer (usually array), pointed to by <buffer>
+
+        int arr[10];
+        fwrite(arr, sizeof(int), 10, ptr);
+
+    EOF - End oF File Character
+        Compare to this when reading from files to avoid SEGFAULT.
+
+
+
+Discipline :
+    -Pointers provide alternate method to pass data between functions.
+    -Using pointers means we pass the actual variable itself.
+    -A change in this functino with pointers used, changes the input variable
+    if used in any other locations of code.
+
+Memory can be thought of as an array of 8-bit wide bytes. (Just a very large array)
+
+Disk space is only persistant storage. Programs cannot modify or utilize this data directly, it must be loaded into RAM.
+
+
+int -> 4 bytes
+char -> 1 byte
+float -> 4 bytes
+double -> 8 bytes
+long long -> 8 bytes
+
+char*(strings) long* int* float* -> 4 or 8
+    64 bit system-8
+    32 bit system-4
+    Every address in memory is x bits long. Where x is 64 or 32 (typically)
+
+
+Memory is an array of byte sized cells. 1 byte wide.
+    Have indicies that can be used for random access to the memory. IE: RAM
+    Each index has an address. IE: Memory location.
+    The memory contains the biary data and the type of data is inferred.
+
+A POINTER IS NOTHING MORE THAN AN ADDRESS.
+
+A pointer is a data item that has a memory address, whose type describes the data at that location. (memory address)
+As such, you can share data structres and information throughout the codebase.
+
+Default pointer is set to NULL;
+    ALWAYS SET TO NULL IF NOT USED AT MOMOENT.
+
+Useing the andpersand operator, you can 'extract' an address from a variable.
+    ie; int x = 14;
+        int *p = &x;
+
+    if arr[] contains doubles then
+        &arr[i] -> is the location in memory where the double value of the ith element exists.
+
+    Therefore, an array's name is simply a pointer to a location in memory, in which the value exists.
+
+    This creates the situation where an array passed into a function being modified, is changed universally. (Globally)
+
+Main purpose of a pointer is to allow us to modify/inspect the location at which it points.
+    Done by dereferencing the pointer using the '*' operator.
+
+    ie; A pointer-to-char called pc, then *pc is the data at that pointer's location.
+
+The dereference operator "goes by reference" and accesses the data at that location.
+    Simliar to visiting a neighbor. Knowing where they live, doesn't mean you're interacting with them.
+    In order to so, you would have to go to their address/location to do so. (physically)
+
+If you try to dereference a pointer that is set to NULL ?
+    This provides a segfault !
+
+    THIS IS GOOD !!
+
+    If you don't set to NULL initially, it will look at a location in memory matching the criteria provided. (Type)
+    This can cause issues system-wide when you dereference that address from memory!!
+    Can be malicious.
+
+Pointers can be frustrating
+    ie; int *px, py, pz; -> this declares pointer-to-int, int, int
+        int *px, *py, *pz; -> this declares pointer-to-int, pointer-to-int, pointer-to-int
+
+
+
+Defining data types.
+
+    typedef (oldname) (newname);
+
+    typedef unsigned char byte;
+
+    ie; typedef char* string;
+
+
+Structures have a two word type name.
+
+struct car
+{
+    int year;
+    char * name;
+    ...
+}
+
+typedef struct car car_t;
+
+    *this prevents the need to use: struct car sedan;
+                            instead: car_t sedan;
+
+Can make the initialization of the car struct anonymouse by inlining the typedef to the struct creation.
+
+typedef struct car
+{
+    int year;
+    char * name;
+    ...
+} car_t;
+
+
+
+
+## DEFINITIONS ##
+
+Pointer Arithmetic : Simply the application of arithmetic on a pointer's adress itself
+
+Segmentation Fault : Attempted to gain access to memory unaccessable to your program.

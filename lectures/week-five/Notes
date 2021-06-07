@@ -1,0 +1,236 @@
+## DATA STRUCTURES ##
+
+Array is an example of a data structure.
+
+Built using :
+    struct
+    .
+    *
+    ->
+
+Linked Lists :
+    A dynamic data structure that can grow and shrink as necessitated
+    by storing a pointer to the current node's next available node.
+
+    This allows storage anywhere inside memory, as opposed to contiguous, as in arrays.
+
+    Has a memory overhead due to needing to store the pointer(S) information as well.
+
+    // 1 points to 2...
+    [1] -> [2] -> [3] ...
+
+    typedef struct
+    {
+            int number;
+            struct node *next;
+    }
+    node;
+
+    -Using typedef doesn't work on the 'next' node,
+     because the compiler has not defined the 'node' keyword yet.
+
+    Cannot rely on binary search :c
+
+    Note: each node represents the return value of a malloc() call for that node
+
+    // Initializing a new node
+    node *n = malloc(sizeof(node));
+
+    // If node set, goto and get the value 'number'
+    if (n != NULL)
+    {
+        // (*n).number;
+
+        // Syntactic sugur
+        n->number = 1;
+        n->next = NULL;
+    }
+
+    // Add node to list
+    list = n;
+
+    if (n != NULL)
+    {
+        // (*n).number;
+
+        // Syntactic sugur
+        n->number = 1;
+        n->next = NULL;
+    }
+
+    // Add node to list
+    list->next = n;
+    ...
+
+    Running Time : Search
+        Big O(n)
+            You have to iterate through every element to add to the tail
+            Conversely: Arrays can jump to the direct index
+
+    Running Time : Insert At Tail
+        Big O(n)
+            You always have to reiterate and rebuild the linkage for each node
+
+    Running Time : Insert At Beginning
+        Big O(1)
+            You can push the new node in the front,
+            and point that to the first node of the head
+
+    Insert Center :
+        Order of operation
+            Allocate new node
+            newNode->next = <node to insert before>;
+            list->next = newNode;
+
+        If you reverse the order, and assign list to the new node first.
+        It will orphan the remaining list entires.
+
+
+
+Binary Trees :
+    A series of nodes where each node contains at most 2 child node(s),
+    representing a 'tree' of nodes.
+             [4]
+        [2]        [6]
+    [1]    [3]  [5]    [7]
+
+    Useful to get the dynamism of lists. With the ease and optimisim of an array
+
+    Recursive Data Structure
+
+    Most important aspect is that there is a sorted pattern
+    ie; in the above, left = less than, right = greater than
+
+    typedef struct node
+    {
+        int number;
+        struct node *left;
+        struct node *right;
+    } node;
+
+    Example of use in a recursive function;
+    --
+        // Tree must be sorted
+        bool binary_search(node *tree, int number)
+        {
+            if (tree == NULL)
+                return false;
+
+            else if (number < tree->number)
+                return search(tree->left, number);
+
+            else if (number > tree->number)
+                return search(tree->right, number);
+
+            else if (number == tree->number)
+                return true;
+        }
+    --
+
+    Running Time : Insertion
+        Big O(log n) *Must be sorted
+        log^2n = height of tree
+
+    To avoid the tree from becoming a list. You have to apply logic to restructure the height
+    Use of log^2n comes in handy there.
+
+
+Hash Tables :
+    Essentially an array of linked lists.
+    Has an insertion/search time of O(1) (constant time)
+
+    David Malan's Holy Grail of Data Structures
+
+    A[Albus]
+    B[]
+    ...
+    H[Hermione]->[Harry]->{Hagrid]
+    ...
+    Y[]
+    Z[Zacharias]
+
+    Can be mapped deterministically.
+
+    Hash Function :
+        Takes as input some string and provides output (typically an integer/number).
+        ie; [Z]acharias = 25, [H]ermione = 7 ...
+        Ideally minimize the number of colliding characters
+
+    The above slowly devolves over time as the lists get longer.
+    This can be mitigated by increasing the hasing functions comparing character count.
+    However, this is a huge memory use because it will hold arbitrary space to keep the
+    indexing capibilites.
+
+    Running Time :
+        Asyimptocially it is O(n);
+            As the 'list' portion gets longer n steps get larger
+        Real World Speed is O(1);
+            If implemented correctly, there's a correct number of 'buckets'-list ratio,
+            it can be orders of magnitutde faster.
+
+
+Trie / Retrieval / Prefix Tree :
+    A tree made up of arrays.
+
+    -Effectively the oposite of a Hash Table.
+
+    We add a new node for the character, at that characters length, if needed.
+
+    when adding a new name, reuse the available characters until change.
+    Then branch and add a new node.
+
+    [][][H] - node
+
+    [A][][]
+
+    [][G][]
+
+    [R][][]
+
+    Running Time : Search/Insertion
+        Big O(1)
+            It is only dependant on the length of the name of the search criteria. (based off the above example)
+
+    Memory Hog
+        Every node contains the same number of pointers. As the trie expands the nodes will contain more null pointers.
+
+
+Abstract Data Types / Structures :
+    Incorperating the use of other data structures, mental representation of simplyfying a process or problem.
+
+    Queue :
+        First-in-first-out - FIFO
+
+        enqueue()
+            enter the queue.
+
+        dequeue()
+            exit the queue.
+
+    Stack :
+        Last-in-first-out - LIFO
+        ie; stack of cds, last cd on is first cd off.
+
+        push()
+            place cd ontop off stack
+
+        pop()
+            take cd off stack
+
+    Dictionary
+        key-value Pair
+
+        [1]["Bob"]
+
+        Value 1 maps to name Bob.
+
+
+## DEFINITIONS ##
+
+Orphan Node : Dropped or lost access to the node
+
+Deterministic : Relating to philisophical doctrine that all events are determind by causes regarded as externalto the will.
+
+Allele : is one of two, or more, versions of the same gene at the same place on a chromosome.
+    -Blood types contain 2 alleles. IE; OO OA OB AO AA AB BO BA
+

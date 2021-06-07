@@ -1,0 +1,24 @@
+CC=clang
+OUTPUT=speller
+SRC=speller.c
+CFLAGS=-ggdb3 -O0 -Qunused-arguments -std=c11 -Wall -Werror -Wextra -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wshadow
+
+debug: speller
+	debug50 ./$(OUTPUT) dictionaries/small texts/cat.txt
+
+val: speller
+	valgrind --track-origins=yes ./$(OUTPUT) dictionaries/large texts/cat.txt
+
+tsmall: speller
+	./$(OUTPUT) dictionaries/small texts/cat.txt
+
+tlarge: speller
+	./$(OUTPUT) dictionaries/large texts/aca.txt
+
+speller:
+	$(CC) $(CFLAGS) -c -o $(OUTPUT).o $(SRC)
+	$(CC) $(CFLAGS) -c -o dictionary.o dictionary.c
+	$(CC) $(CFLAGS) -o $(OUTPUT) $(OUTPUT).o dictionary.o -lm
+
+clean:
+	rm ./$(OUTPUT)

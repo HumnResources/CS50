@@ -1,0 +1,53 @@
+sort1 uses: Bubble Sort
+
+How do you know?:
+    The time complexity of the upper and lower bounds are inconsistent.
+    With the Omega runtime having a significantly lower complexity when given a sorted list.
+
+sort2 uses: Merge Sort
+
+How do you know?:
+    It has a substantially faster runtime. Indicating a time complexity of O(log n) or better.
+    Merge sort is O(n log n)
+
+sort3 uses: Selection Sort
+
+How do you know?:
+    The time complexity seems relativeliy consistent across the tests, between the upper and lower bounds.
+    Indicating that the Omega/Big O notation would be the same, given enough data. Of the ones provided, only
+    Selection sort meets this
+
+
+
+
+## Times - Real - CS50 IDE ##
+
+sorted5000.txt
+    sort1 : 0.104s
+    sort2 : 0.011s
+    sort3 : 0.039s
+
+random5000.txt
+    sort1 : 0.111s
+    sort2 : 0.011s
+    sort3 : 0.039s
+
+reversed5000.txt
+    sort1 : 0.058s
+    sort2 : 0.011s
+    sort3 : 0.035s
+
+sorted50000.txt
+    sort1 : 3.266s
+    sort2 : 2.230s
+    sort3 : 7.425s
+
+random50000.txt
+    sort1 : 15.309s
+    sort2 : 1.696s
+    sort3 : 7.866s
+
+reversed50000.txt
+    sort1 : 12.074s
+    sort2 : 3.686s
+    sort3 : 9.654s
