@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <script>
+            // Best practice to keep the script tag to load last as it can take the longest to load
+
+            function greet()
+            {
+                let name = document.querySelector('#name').value; // querySelector(<id>) searches DOM for specified id
+                alert('hello, ' + name);
+            }
+            // function listen()
+            // {
+                // document.querySelector('form').addEventListener('submit', greet)
+                // Selecting the form before initialization here.
+                // We do not call greet, we pass the name only to give the event handler a reference
+            // }
+
+            // document.addEventListener('DOMContentLoaded', listen);
+            // Refactor as lambda
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelector('form').addEventListener('submit', function () {
+                    let name = document.querySelector('#name').value;
+                    alert('hello, ' + name);
+                });
+            });
+
+        </script>
+        <title>
+            Hello, title
+        </title>
+    </head>
+    <body>
+        <form> <!-- onsubmit="greet(); return false;">  functino call in js return false means do not submit form to server BAD design -->
+            <input autocomplete="off" autofocus=true id="name" placeholder="What's your name?" type="text">
+            <input type="submit" value="Greet Me">
+        </form>
+
+    </body>
+</html>

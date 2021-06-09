@@ -11,12 +11,12 @@ Protocols: A set of conventions to adhere to.
 
     Packets - Small pieces of information.
         -Akin to envelopes.
-        Packet routing is not garunteed to be the same
+        -Packet routing is not garunteed to be the same
+        -Contain sequence number too ensure order
 
     IP: Internet
         Protocol
-
-        Contains an address.
+        -Contains an address.
             -Akin to an address on envelope
 
     TCP: Transmission
@@ -33,17 +33,190 @@ Protocols: A set of conventions to adhere to.
     PORT:
         Integer that represents a specific request type.
 
-        80 : HTTP
-        443 : HTTPS
+        80 : HTTP - Insecure web traffic
+        443 : HTTPS - Secure web traffic
 
     DNS: Domain
          Name
          System
 
-         Defines IP address' as a readable string of characters for humans to read.
-         Converts human readable format to an IP address.
+         -Defines IP address' as a readable string of characters for humans to read.
+          Converts human readable format to an IP address.
+
+    HTTP(s):
+        Specific to web servers
+
+        Commands:
+            GET - Keyword to request data from a server
+            POST
+
+        https://www.example.com/
+            https - (s) means secure/encrypted
+            www. - Convention to represent an address of a web server as opposed to file server or the likes
+            example.com - Domain name
+            .com - Referred to as Top Level Domain (TLD) Generally categorized type of website ie; example.gov - government, example.us - american ...
+            /index.html -> implicit, hidden file as the root. example.com = example.com/index.html
+
+        Reqeuest Header Example:
+            GET / HTTP/1.1 - <request type> / <protocol> / <version>
+            Host: www.example.com - Provides context information to ensure correct url
+            Connection: Keep-Alive
+            ...
+        Response Header Example:
+            HTTP/1.1 200 OK <protocol>/<version> <status-code> <short desc>
+            Content-Type: text/html
+            Location: https://www.example.com - This header allows a redirect
+            ...
+            HTTP/1.1 403 FORBIDDEN
+
+
+        Wildcards:
+            GET /search?q=cats HTTP/1.1
+            Host: www.google.com/
+            ...
+            ?q=cats - sets the q variable to cats for HTTP to process
+
+        Status Codes:
+            200 - OK
+            301 - Moved Permanently
+            304 - Not Modified - Use cache
+            307 - Temporary Redirect
+            401 - Unauthorized
+            403 - Forbidden
+            404 - Not Found
+            418 - I'm a teapot ?
+            500 - Internal Server Error
+
+        Mime Types:
+            text/html
+            image/jpg
+
+    Routing:
+        USER <request> -> Router(s) -> DNS Host -> Web-Server <packetize, return>
+        Metaphorically tells router to send on one of two cables to and from end points
+        Utilize - Routing Tables
+
+
+
+## HTML ##
+
+Hyper Text Markup Language
+
+    tags - enclosed in < >
+    attributes - define characteristics for tags
+
+    Example:
+        <!DOCTYPE html> - Formal declaration of document type
+
+        <html lang="en"> - open tag - lang= is an attribute
+            <head> - top of web page
+                <title>
+                    hello, title
+                </title>
+            </head>
+            <body> - viewport
+                hello, body
+            </body>
+        </html> - close tag
+
+    -Contains a heiracheral structure where there may be many children
+    -Representation of a data-structure
+
+                document
+                  |
+                html
+            head    body
+              |       |
+            title   'hello, body'
+              |
+    'hello, title'
+
+    -Server is required to 'serve' the html page/file
+
+
+## JAVASCROPT ##
+
+Javascript interacts directly with the Document of the webpage (DOM)
+
+Implemented in HTML using <script src="path/to/file.js"></script>
+
+Using document.querySelector('body') you can modify the body's css directly with .style attribute
+
+Developer Tools!
+    CTRL + Right Mouse -> inspect
+
+Syntax Examples:
+    let x = 0;
+    x++;
+
+    if (x < y)
+    {
+    }
+    else if ()
+    {
+    }
+    else
+    {
+    }
+
+    while (true)
+    {
+    }
+
+    for (let x = 0; x < 5; x++)
+    {
+    }
+
+Listen Events:
+    blur
+    change - drop down menus/toggles etc
+    click
+    drag
+    focus
+    ketup
+    load
+    mousedown
+    mouseover
+    mouseup
+    submit
+    touchmove
+    unload
+    keyup
+    keydown
+    ...
+
+
 
 
 
 ## DEFINITIONS ##
+
+    Internet Registrar: Authorized service that rents domain names.
+
+    CURL: Connect to a URL
+
     Router: relay packets to the appropriate ip address.
+
+    World Wide Web: An application/service that utilizes the above protocols.
+
+    URL: Uniform
+         Resource
+         Locator
+
+    HTTP: Hyper
+          Text
+          Tranrsfer
+          Protocol
+
+    Mime Type: Content type
+
+    Phising: Trying to trick humans via social engineering by doing something they did not intend.
+        Providing a fake website copy to get a password
+
+
+    HTML Entity: Numeric code that identifies a symbol often not on a keyboard.
+
+
+    DOM: Document Object Model
+
+    Lambda: Anonymouse Functions

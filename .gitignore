@@ -4,3 +4,4 @@
 .sqlite_history/
 .bash_history
 .viminfo
+.local/
