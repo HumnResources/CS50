@@ -1,4 +1,6 @@
-.npm
-.cache
-.config
-.sqlite_history
+.npm/
+.cache/
+.config/
+.sqlite_history/
+.bash_history
+.viminfo

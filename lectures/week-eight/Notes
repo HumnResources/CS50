@@ -1,0 +1,49 @@
+## INTERNET - WEB DEV ##
+
+
+What is the internet?
+    The infrastructure connecting devices via specified protocols.
+    A mesh network consisting of a vast amount of routers that relay data as needed.
+
+
+Protocols: A set of conventions to adhere to.
+    eg; TCP/IP
+
+    Packets - Small pieces of information.
+        -Akin to envelopes.
+        Packet routing is not garunteed to be the same
+
+    IP: Internet
+        Protocol
+
+        Contains an address.
+            -Akin to an address on envelope
+
+    TCP: Transmission
+         Control
+         Protocol
+
+         Convenient for servers to do multiple things
+         Contains a PORT number
+         Handles delivery.
+            Ensures when you send data, if anything gets lost, retransmits as needed.
+
+        Adaptive solution to packet routing inconsistencies.
+
+    PORT:
+        Integer that represents a specific request type.
+
+        80 : HTTP
+        443 : HTTPS
+
+    DNS: Domain
+         Name
+         System
+
+         Defines IP address' as a readable string of characters for humans to read.
+         Converts human readable format to an IP address.
+
+
+
+## DEFINITIONS ##
+    Router: relay packets to the appropriate ip address.
