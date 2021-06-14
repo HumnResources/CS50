@@ -4,37 +4,67 @@
 What is the internet?
     The infrastructure connecting devices via specified protocols.
     A mesh network consisting of a vast amount of routers that relay data as needed.
+    Interconnected network consisting of smaller networks
 
 
 Protocols: A set of conventions to adhere to.
     eg; TCP/IP
 
     Packets - Small pieces of information.
-        -Akin to envelopes.
+        IP LAYER   |
+        TCP LAYER  | -> Wrapped -> Unwrapped by TCP
+        <data>     |
+
+        Receiver IP
+        25<port> / 1 of 4 <seq>
+        <data>
+
+        -Akin  to envelopes.
         -Packet routing is not garunteed to be the same
-        -Contain sequence number too ensure order
+
 
     IP: Internet
         Protocol
         -Contains an address.
             -Akin to an address on envelope
+            -32-bit unique address
+            -Represented as four, 8-bit clusters
+            w.x.y.z - non negative values from 0-255 - IPv4
+
+            IPv6 is 128-bit addresses
+            s:t:u:v:w:x:y:z - represents 1-4 hex digits in the range [0, FFFF]
+                1234:5678:90ab:fe33:123f:ffe3:5554:cab3
+                2001:4860:4860:0:0:0:0:8844 - google
+                    2001:4860:4860::8844
+
+        Connectionless Protocol
+            Packets can be directed multiple ways to reach the end point
 
     TCP: Transmission
          Control
          Protocol
 
-         Convenient for servers to do multiple things
-         Contains a PORT number
-         Handles delivery.
+        Directs the packets to the correct service or program.
+
+        Garuntees delivery
+
+        Convenient for servers to do multiple things
+        Contains a PORT number
+        Handles delivery.
             Ensures when you send data, if anything gets lost, retransmits as needed.
 
         Adaptive solution to packet routing inconsistencies.
 
     PORT:
         Integer that represents a specific request type.
-
+        21 - FTP - File Trasnfer Protocol
+        25 - SMTP (e-mail)
+        53 - DNS - Domain Name System
         80 : HTTP - Insecure web traffic
         443 : HTTPS - Secure web traffic
+
+    DHCP:
+        Assigns an IP address to a connected device. Hosted on a server.
 
     DNS: Domain
          Name
@@ -43,10 +73,17 @@ Protocols: A set of conventions to adhere to.
          -Defines IP address' as a readable string of characters for humans to read.
           Converts human readable format to an IP address.
 
-    HTTP(s):
-        Specific to web servers
+         Dictionary, it's just a k,v pair of; www.example.com -> 0.0.0.0
+            Usually local DNS repositories that get aggregated together
+            Decentralized
 
-        Commands:
+    HTTP(s):
+        Application Layer Protocol
+            Other Examples; FTP/SMTP/DDS/RDP/XMPP
+
+        Specifies how to make a web server
+
+        Methods:
             GET - Keyword to request data from a server
             POST
 
@@ -58,34 +95,43 @@ Protocols: A set of conventions to adhere to.
             /index.html -> implicit, hidden file as the root. example.com = example.com/index.html
 
         Reqeuest Header Example:
-            GET / HTTP/1.1 - <request type> / <protocol> / <version>
+            GET / HTTP/1.1 - <request type> <dir> <protocol> / <version> || <method> <request-target> <http-version>
             Host: www.example.com - Provides context information to ensure correct url
             Connection: Keep-Alive
             ...
         Response Header Example:
-            HTTP/1.1 200 OK <protocol>/<version> <status-code> <short desc>
+            HTTP/1.1 200 OK <protocol>/<version> <status-code> <opt:short desc>
             Content-Type: text/html
             Location: https://www.example.com - This header allows a redirect
             ...
             HTTP/1.1 403 FORBIDDEN
 
 
-        Wildcards:
+        Variables:
             GET /search?q=cats HTTP/1.1
             Host: www.google.com/
             ...
             ?q=cats - sets the q variable to cats for HTTP to process
 
-        Status Codes:
-            200 - OK
-            301 - Moved Permanently
-            304 - Not Modified - Use cache
-            307 - Temporary Redirect
-            401 - Unauthorized
-            403 - Forbidden
-            404 - Not Found
-            418 - I'm a teapot ?
-            500 - Internal Server Error
+        Status Code Classes:
+            Success
+                200 - OK
+
+            Redirection
+                301 - Moved Permanently
+                302 - Found Temporarily
+                304 - Not Modified - Use cache
+                307 - Internal Redirect
+
+            Client Error
+                401 - Unauthorized
+                403 - Forbidden
+                404 - Not Found
+                418 - I'm a teapot ? - David Malan's Lecture
+
+            Server Error
+                500 - Internal Server Error
+                504 - Gateway Timeout
 
         Mime Types:
             text/html
@@ -99,14 +145,15 @@ Protocols: A set of conventions to adhere to.
 
 
 ## HTML ##
-
-Hyper Text Markup Language
+    Hyper Text Markup Language
 
     tags - enclosed in < >
     attributes - define characteristics for tags
 
     Example:
-        <!DOCTYPE html> - Formal declaration of document type
+        <!DOCTYPE html> - Formal declaration of document type default HTML5
+
+        <!-- Comments suck in html -->
 
         <html lang="en"> - open tag - lang= is an attribute
             <head> - top of web page
@@ -122,7 +169,7 @@ Hyper Text Markup Language
     -Contains a heiracheral structure where there may be many children
     -Representation of a data-structure
 
-                document
+               document
                   |
                 html
             head    body
@@ -133,58 +180,145 @@ Hyper Text Markup Language
 
     -Server is required to 'serve' the html page/file
 
+    Tags:
+        Tags contain their own properties to change behavior
 
-## JAVASCROPT ##
+        <b> </b> - Boldface
+        <i> </i> - Italicize
+        <u> </u> - underline
+        <p> </p> - Paragraphs
+        <h> </h> - Headers 1-6
 
-Javascript interacts directly with the Document of the webpage (DOM)
+        <ul> </ul> - unordered list
+        <ol> </ol> - ordered list
+        <li> </li> - list item
 
-Implemented in HTML using <script src="path/to/file.js"></script>
+        <table> </table>
+        <tr> </tr> - table row
+        <ti> </ti> - table item
 
-Using document.querySelector('body') you can modify the body's css directly with .style attribute
+        <form> </form>
+        <input name=<id> type=<data> /> - Field within form. Data Types; test/password/radio/checkbox/submit
+            Self-closing
 
-Developer Tools!
-    CTRL + Right Mouse -> inspect
+        <div> </div> - Marks arbitrary division of the page
 
-Syntax Examples:
-    let x = 0;
-    x++;
 
-    if (x < y)
-    {
-    }
-    else if ()
-    {
-    }
-    else
-    {
-    }
+        <a href=<url> </a> - anchor tag
+        <img src=<url> /> - Image
+            Self-closing
 
-    while (true)
-    {
-    }
+## JAVASCRIPT ##
+    Javascript interacts directly with the Document of the webpage (DOM)
+    Client-side browser language based off the C family of languages.
 
-    for (let x = 0; x < 5; x++)
-    {
-    }
+    Dynamically typed.
 
-Listen Events:
-    blur
-    change - drop down menus/toggles etc
-    click
-    drag
-    focus
-    ketup
-    load
-    mousedown
-    mouseover
-    mouseup
-    submit
-    touchmove
-    unload
-    keyup
-    keydown
-    ...
+    Implemented in HTML using
+        <script src="path/to/file.js"></script>
 
+    Using;
+        document.querySelector('body')
+    you can modify the body's css directly with .style attribute
+
+    Developer Tools!
+        CTRL + Right Mouse -> inspect
+
+    Syntax Examples:
+        let x = 0;
+        x++;
+        ?:
+
+        if (x < y)
+        {};
+        else if ()
+        {};
+        else
+        {};
+
+        while (true)
+        {};
+
+        for (let x = 0; x < 5; x++)
+        {};
+
+        function <name>(<params>)
+        {};
+
+        // Anonymous function - Maps() are a good use
+        function ()
+        {};
+        let nums = [1, 2, 3, 4];
+        nums = nums.map(function(num) {
+            return num * 2;
+        });
+
+
+        // Anonymous function defined as const lambda
+        const () => {};
+
+        // Objects - Contain methods that apply to that object only
+        let obj = {name : 'okay', num : 123, ...};
+
+        // Array
+        let arr = [val1, val2, ...];
+
+        // Loops(redux)
+        for (let key in obj) // iterates keys
+        {
+            // use object[key] ...
+        };
+        for (let key of obj) // iterates values
+        {
+            // use key ...
+        };
+
+
+    Listen Events:
+        blur
+        change - drop down menus/toggles etc
+        click
+        drag
+        focus
+        ketup
+        load
+        mousedown
+        mouseover
+        mouseup
+        submit
+        touchmove
+        unload
+        keyup
+        keydown
+        ...
+
+
+## CSS ##
+    Cascading Style Sheets
+    Key, Value pairs that define behavior/style of an item defined using selectors
+
+    Properties:
+        border: <style> <color> <width>;
+        background-color: <color|hex>;
+        foreground-color: ...;
+        font-size: <absolute|relative>;
+            keywords(small|smaller<relative>), fixed points(10pt), percent
+        text-align: <left|right|center|justify>
+
+
+
+    Selectors:
+        # - ID - Only applies to element conaining unique ID
+        . - Class - Can encapsulate many elements placing at root of elements
+        element - Specific element only
+
+    Use;
+        <style> </style>
+        <link href="style.css" rel="stylesheet"> * Preferred method
+            -rel means relative to file for context on how to treat it
+    To include ine html file.
+
+    /* I'm a comment */
 
 
 
@@ -203,6 +337,10 @@ Listen Events:
          Resource
          Locator
 
+    TCP: Transmission
+         Control
+         Protocol
+
     HTTP: Hyper
           Text
           Tranrsfer
@@ -220,3 +358,15 @@ Listen Events:
     DOM: Document Object Model
 
     Lambda: Anonymouse Functions
+
+    DHCP: Dynamic
+          Host
+          Configuration
+          Protocol
+
+    Access Point: A device that provides IP connectivity.
+        Router contains the public IP address for all the connectes devices
+            Routing Table
+
+    WAN: Wide-Area Network
+        Routes large number of private IPs to router

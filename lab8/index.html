@@ -7,36 +7,94 @@
         <title>Trivia!</title>
 
         <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                for (let btn of document.querySelectorAll('.mchoice #answer')) {
+                    if (btn.innerHTML === '255 168'){
+                        btn.onclick = mchoice_valid;
+                    }
+                    else {
+                        btn.onclick = mchoice_invalid;
+                    }
+                }
+                document.querySelector('.free_response_form form').addEventListener('submit', free_response);
+            })
 
-            // TODO: Add code to check answers to questions
+            const mchoice_invalid = (e) => {
+                let btn = e.currentTarget;
+                btn.style.backgroundColor = 'red';
 
+                let responseElem = document.querySelector('#mchoice_response')
+                responseElem.innerHTML = 'Incorrect.';
+                responseElem.style.color = 'red';
+                responseElem.style.visibility = 'visible';
+            }
+
+            const mchoice_valid = (e) => {
+                let btn = e.currentTarget;
+                btn.style.backgroundColor = 'green';
+
+                let responseElem = document.querySelector('#mchoice_response');
+                responseElem.innerHTML = 'Correct!';
+                responseElem.style.color = 'green';
+                responseElem.style.visibility = 'visible';
+            }
+
+            const free_response = (e) => {
+                // This prevents the page from reloading to display result to user.
+                // 'submit' is normally used for server calls
+                e.preventDefault();
+
+                let textBox = document.getElementById('free_user_answer');
+                let responseElem = document.getElementById('free_response');
+                let answer = textBox.value;
+
+                if (answer.toUpperCase() === 'GREENLAND') {
+                    responseElem.innerHTML = 'Correct!';
+                    responseElem.style.color = 'green';
+                    responseElem.style.visibility = 'visible';
+
+                    textBox.style.background = 'green';
+                }
+                else {
+                    responseElem.innerHTML = 'Incorrect.';
+                    responseElem.style.color = 'red';
+                    responseElem.style.visibility = 'visible';
+
+                    textBox.style.background = 'red';
+                }
+            }
         </script>
-
     </head>
     <body>
-
         <div class="jumbotron">
             <h1>Trivia!</h1>
         </div>
-
         <div class="container">
-
             <div class="section">
                 <h2>Part 1: Multiple Choice </h2>
                 <hr>
-
-                <!-- TODO: Add multiple choice question here -->
-
+                <h3 style='text-align: center;'>How many posibilities are there in a game of Tic-Tac-Toe?<h3>
+                <h4 id='mchoice_response' style='visibility: hidden; text-align: center;'> </h4>
+                <div class="mchoice">
+                    <button id='answer'>145 773</button>
+                    <button id='answer'>255 168</button>
+                    <button id='answer'>54 029</button>
+                    <button id='answer'>547 265</button>
+                    <button id='answer'>1 002 680</button>
+                </div>
             </div>
-
             <div class="section">
                 <h2>Part 2: Free Response</h2>
                 <hr>
-
-                <!-- TODO: Add free response question here -->
-
+                <h3 style='text-align: center;'>What is the name of the world's largest Island?<h3>
+                <h4 id='free_response' style='visibility: hidden; text-align: center;'> </h4>
+                <div class="free_response_form">
+                    <form>
+                        <input autocomplete="off" id='free_user_answer' type='text' placeholder='Canada?'>
+                        <input type='submit' value='Submit'>
+                    </form>
+                </div>
             </div>
-
         </div>
     </body>
 </html>
