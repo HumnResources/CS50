@@ -18,8 +18,13 @@ Flask:
        sees \   / uses
             user
 
-    Render_template: uses {{ <var name> }} to reference http variables 
+    Render_template: uses {{ <input var name> }} to reference http variables 
 
+    request.args - refers to the use of GET
+    request.form - refers to the use of POST
+
+
+-Using POST iwill hide information submit to the server from the user, from the browser (url)
 
 ## DEFINITIONS ##
 
