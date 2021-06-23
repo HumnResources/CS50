@@ -1,0 +1,28 @@
+## WEB DEVELOPMENT ##
+
+Flask:
+    A framework to simplify common web server tasks.
+    
+    Structure:
+        application.py
+        requirements.txt
+        static/
+        templates/
+        
+    MVC Structure:
+            Model - data (database, csv, ...)
+          |       |
+        updates  manipulates
+          |       |
+        view     controller 
+       sees \   / uses
+            user
+
+    Render_template: uses {{ <var name> }} to reference http variables 
+
+
+## DEFINITIONS ##
+
+MVC: Model View Controller Paradigm.
+
+Design Pattern: Ways to write code as a pattern.
